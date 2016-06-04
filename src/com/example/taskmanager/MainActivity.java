@@ -9,13 +9,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.Toast;
 
-public class MainActivity extends Activity {
-
+public class MainActivity extends ListActivity {
+	String [] title = {"TEST 1", "TEST 2","TEST 3"};
+	//Json json;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		ListAdapter listAdapter = new ListAdapter(this, title);
+		setListAdapter(listAdapter);
 	}
 
 	@Override
@@ -24,7 +29,12 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		ListAdapter listAdapter = new ListAdapter(this, title);
+		setListAdapter(listAdapter);
+		super.onListItemClick(l, v, position, id);
+	}
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
