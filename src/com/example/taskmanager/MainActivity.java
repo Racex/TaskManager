@@ -2,6 +2,7 @@ package com.example.taskmanager;
 
 import android.app.Activity;
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -39,5 +40,7 @@ public class MainActivity extends Activity {
 	public void openTaskMenu(View v){
 		
 		Log.d("Button", "dodaj");
+		Intent intent = new Intent(this, TaskActivity.class);
+		startActivity(intent);
 	}
 }
