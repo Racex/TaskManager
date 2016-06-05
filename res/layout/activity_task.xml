@@ -22,7 +22,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="67dp"
         android:ems="10" 
-        android:singleLine="true"/>
+        android:singleLine="true"
+        android:hint="Podaj tytuł"/>
 
     <EditText
         android:id="@+id/Calendary"
@@ -45,7 +46,8 @@
         android:layout_below="@+id/tittle"
         android:layout_marginTop="49dp"
         android:ems="10"
-        android:singleLine="true" >
+        android:singleLine="true" 
+        android:hint="Podaj opis">
 
       
     </EditText>

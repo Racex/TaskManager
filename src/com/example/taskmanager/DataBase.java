@@ -1,24 +1,15 @@
 package com.example.taskmanager;
 
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteDatabase.CursorFactory;
-import android.database.sqlite.SQLiteDatabaseLockedException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
@@ -66,6 +57,40 @@ public class DataBase extends SQLiteOpenHelper
 	public SQLiteDatabase getDataBase()
 	{
 		return this.getWritableDatabase();
+	}
+	
+	public JSONArray getJsonArrayDataBase() throws JSONException
+	{
+		JSONArray array = new JSONArray();
+		
+		 	SQLiteDatabase db= getReadableDatabase();
+		 	try{
+		    Cursor cursor = db.rawQuery("SELECT * FROM " +dataBaseName,null);
+		    
+		    cursor.moveToFirst();
+		    while(!cursor.isAfterLast())
+		    {		JSONObject jsonRead = new JSONObject();
+		            jsonRead.put("title",cursor.getString(cursor.getColumnIndex("TITLE")));
+		            jsonRead.put("description",cursor.getString(cursor.getColumnIndex("DESCRIPTION")));
+		            jsonRead.put("date",cursor.getString(cursor.getColumnIndex("DATE")));
+		            jsonRead.put("url",cursor.getString(cursor.getColumnIndex("URL")));
+		            array.put(jsonRead);
+		            cursor.moveToNext();
+		    }	
+		            return array;
+		 	}catch(CursorIndexOutOfBoundsException e)
+		 	{
+		 		Log.e("KURSOR", "KURSOR PUSTY");
+		 		return null;
+		 	}
+	}
+
+	public void remove(JSONObject jsonObject) throws JSONException {
+		SQLiteDatabase db= getReadableDatabase();
+	    if(db.delete(dataBaseName, "TITLE" + "="+ "'"+jsonObject.getString("title")+"'",null) > 0);
+	    Log.d("USUNIETE", jsonObject.toString());
+	    
+	    //  return array;
 	}
    
 }

@@ -8,8 +8,7 @@ import android.app.DialogFragment;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.Toast; 
+import android.widget.EditText; 
 
 @SuppressLint("ValidFragment") 
 public class DateDialog extends DialogFragment implements DatePickerDialog.OnDateSetListener {
