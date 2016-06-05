@@ -1,5 +1,8 @@
 package com.example.taskmanager;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,8 +12,10 @@ import com.squareup.picasso.Picasso;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.net.ParseException;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -57,7 +62,7 @@ public class TaskActivity extends Activity {
 	
 	
 	public void addTask(View view) throws JSONException
-	{			
+	{				
 		JSONObject json = new JSONObject();
 				EditText text;
 				text =(EditText) findViewById(R.id.tittle);				
@@ -66,6 +71,8 @@ public class TaskActivity extends Activity {
 				json.put("description", text.getText());
 				text =(EditText) findViewById(R.id.Calendary);
 				json.put("date",text.getText());
+				ImageView maciek = (ImageView) findViewById(R.id.imageView1);
+				if(jsonIsCorrect(json)){
 				jsonArray.put(json);
 				//	json.put("url", maciek);
 				db.addToDataBase(json);
@@ -73,7 +80,49 @@ public class TaskActivity extends Activity {
 				Toast.makeText(TaskActivity.this, jsonArray.toString(),Toast.LENGTH_LONG).show();
 				Intent intent = new Intent(this, MainActivity.class);
 				startActivity(intent);
+				}
 	}
+	private boolean jsonIsCorrect(JSONObject json2) throws JSONException {
+		if(json2.get("title").toString().equals(""))
+		{
+			Toast("Tytul jest pusty");
+			return false;
+		}
+		if(!json2.get("date").toString().equals(""))
+		{
+			Date date = null;
+			try {
+			    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+			    try {
+					date = (Date) sdf.parse(json2.get("date").toString());
+				} catch (java.text.ParseException e) {
+					// TODO Auto-generated catch block
+					return false;
+				}
+			    if (!json2.get("date").toString().equals(sdf.format(date))) {
+			        date = null;
+			    }
+			} catch (ParseException ex) {
+			    ex.printStackTrace();
+			}
+			if (date == null) {
+				Toast("Nie poprawny format Daty DD-MM-ROK");
+			    return false;
+			} else {
+			    return true;
+				}
+			}	
+		return true;
+	}
+
+
+	private void Toast(String string) {
+		Toast toast =Toast.makeText(this, string, Toast.LENGTH_SHORT);
+		toast.setGravity(Gravity.CENTER ,0, 0);
+		toast.show();
+	}
+
+
 	public void onStart(){
      	super.onStart();
      	EditText txtdate;
