@@ -2,34 +2,43 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="horizontal" 
+    android:screenOrientation="portrait">
 
     <ImageView
-        android:id="@+id/obrazek"
+        android:id="@+id/picture_from_signal_list_model"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="36dp"
-        android:src="@drawable/ic_launcher" />
+        android:icon="@android:drawable/ic_menu_save" />
+
+    <TextView
+        android:id="@+id/how_many_days"
+        android:layout_width="114dp"
+        android:layout_height="38dp"
+        android:layout_alignBottom="@+id/picture_from_signal_list_model"
+        android:layout_alignParentRight="true"
+        android:ems="30"
+        android:text="Zostalo Ci"
+        android:textSize="20dp" />
 
     <TextView
         android:id="@+id/description"
-        android:layout_width="wrap_content"
+        android:layout_width="89dp"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/obrazek"
-        android:layout_marginLeft="37dp"
-        android:layout_toRightOf="@+id/obrazek"
+        android:layout_alignBottom="@+id/picture_from_signal_list_model"
+        android:layout_alignLeft="@+id/title"
         android:ems="10"
         android:text="description" />
 
     <TextView
         android:id="@+id/title"
-        android:layout_width="wrap_content"
+        android:layout_width="64dp"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/description"
-        android:layout_alignTop="@+id/obrazek"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="15dp"
+        android:layout_toRightOf="@+id/picture_from_signal_list_model"
         android:ems="10"
         android:text="Title" />
 

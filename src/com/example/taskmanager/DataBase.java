@@ -45,7 +45,7 @@ public class DataBase extends SQLiteOpenHelper
 		creat.put("TITLE", json.getString("title"));
 		creat.put("DESCRIPTION", json.getString("description"));
 		creat.put("DATE", json.getString("date"));
-		creat.put("URL", "nie ma jeszcze");
+		creat.put("URL", json.getString("url"));
 		if(db.insert(dataBaseName, null, creat) != -1){
 			Log.d("DataBase", "Dodano do bazy" + json.toString());
 		}
@@ -53,6 +53,7 @@ public class DataBase extends SQLiteOpenHelper
 		{
 			Log.d("DataBase", "nie dodano do bazy" + json.toString());
 		}
+		db.close();
 	}
 	public SQLiteDatabase getDataBase()
 	{
@@ -76,10 +77,11 @@ public class DataBase extends SQLiteOpenHelper
 		            jsonRead.put("url",cursor.getString(cursor.getColumnIndex("URL")));
 		            array.put(jsonRead);
 		            cursor.moveToNext();
-		    }	
-		            return array;
+		    }		cursor.close();
+		    db.close();        
+		    return array;
 		 	}catch(CursorIndexOutOfBoundsException e)
-		 	{
+		 	{	db.close();
 		 		Log.e("KURSOR", "KURSOR PUSTY");
 		 		return null;
 		 	}
@@ -88,6 +90,7 @@ public class DataBase extends SQLiteOpenHelper
 	public void remove(JSONObject jsonObject) throws JSONException {
 		SQLiteDatabase db= getReadableDatabase();
 	    if(db.delete(dataBaseName, "TITLE" + "="+ "'"+jsonObject.getString("title")+"'",null) > 0);
+	    db.close();
 	    Log.d("USUNIETE", jsonObject.toString());
 	    
 	    //  return array;

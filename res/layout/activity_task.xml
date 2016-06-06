@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:screenOrientation="portrait">
 
     <Button
         android:id="@+id/button1"
@@ -26,20 +27,7 @@
         android:hint="Podaj tytuł"/>
 
     <EditText
-        android:id="@+id/Calendary"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/Description"
-        android:layout_below="@+id/Description"
-        android:layout_marginTop="43dp"
-        android:ems="10" 
-        android:singleLine="true"
-        android:hint="Podaj date"
-          
-         />
-
-    <EditText
-        android:id="@+id/Description"
+        android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/tittle"
@@ -47,18 +35,47 @@
         android:layout_marginTop="49dp"
         android:ems="10"
         android:singleLine="true" 
-        android:hint="Podaj opis">
+        android:hint="Podaj opis"
+
+       />
+
+   <android.support.v4.view.ViewPager
+       xmlns:android="http://schemas.android.com/apk/res/android"
+       android:id="@+id/menu_pager"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_above="@+id/button1"
+       android:layout_alignLeft="@+id/button1"
+       android:layout_alignRight="@+id/button1"
+       android:layout_below="@+id/description" >
+
+   </android.support.v4.view.ViewPager>
+
+   <EditText
+       android:id="@+id/time"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_alignBottom="@+id/menu_pager"
+       android:layout_marginBottom="49dp"
+       android:layout_toLeftOf="@+id/menu_pager"
+       android:ems="10"
+       android:hint="Godzina"
+       android:singleLine="true" 
+      />
 
       
-    </EditText>
+  
 
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/Calendary"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="14dp"
-        android:src="@drawable/ic_launcher" />
+   <EditText
+       android:id="@+id/day"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_alignBaseline="@+id/time"
+       android:layout_alignBottom="@+id/time"
+       android:layout_alignParentRight="true"
+       android:layout_toRightOf="@+id/menu_pager"
+       android:ems="10"
+       android:hint="Dzień"
+       android:singleLine="true" />
 
 </RelativeLayout>

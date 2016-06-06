@@ -4,6 +4,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.example.taskmanager.adapter.ListAdapter;
+
 import android.annotation.SuppressLint;
 import android.app.ListActivity;
 import android.content.DialogInterface.OnClickListener;
@@ -35,6 +37,7 @@ public class MainActivity extends ListActivity {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				
 				if(array != null){
 				listAdapter = new ListAdapter(this, array);
 				setListAdapter(listAdapter);
@@ -80,6 +83,7 @@ public class MainActivity extends ListActivity {
 	public void openTaskMenu(View v){
 		Intent intent = new Intent(this, TaskActivity.class);
 		startActivity(intent);
+		finish();
 		//putextra db and array ?
 	}
 

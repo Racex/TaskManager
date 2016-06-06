@@ -7,13 +7,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.example.taskmanager.adapter.SwipAdapter;
+import com.example.taskmanager.timedialog.DateDialog;
+import com.example.taskmanager.timedialog.TimeDialog;
 import com.squareup.picasso.Picasso;
 
 import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.net.ParseException;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -21,23 +26,32 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 public class TaskActivity extends Activity {
 	DataBase db;
 	JSONObject json;
 	JSONArray jsonArray;
+	public ViewPager viewpager;
+	SwipAdapter adapter;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_task);
+		viewpager = (ViewPager) findViewById(R.id.menu_pager);
 		json=new JSONObject();
 		jsonArray = new JSONArray();
 		db=new DataBase(this);
-		ImageView image = (ImageView) findViewById(R.id.imageView1);
-		Picasso.with(this).load("https://j7w7h8q2.ssl.hwcdn.net/achievements/ach_ipad/6.10.png").resize(512,512).into(image);
-		}
+		adapter = new SwipAdapter(this);	
+		viewpager.setAdapter(adapter);
+		//txt= (EditText) findViewById(R.id.time);
+		//fromTime = new TimeDialog(this, txt);
+		// EditText editTextFromTime = (EditText) findViewById(R.id.time);
+		 
+		// TimeDialog fromTime = new TimeDialog(this, editTextFromTime);
+	}
 	
 	
 	@Override
@@ -67,12 +81,15 @@ public class TaskActivity extends Activity {
 				EditText text;
 				text =(EditText) findViewById(R.id.tittle);				
 				json.put("title", text.getText());
-				text =(EditText) findViewById(R.id.Description);
+				text =(EditText) findViewById(R.id.description);
 				json.put("description", text.getText());
-				text =(EditText) findViewById(R.id.Calendary);
+				text =(EditText) findViewById(R.id.day);
 				json.put("date",text.getText());
-				ImageView maciek = (ImageView) findViewById(R.id.imageView1);
-				if(jsonIsCorrect(json)){
+				text =(EditText) findViewById(R.id.time);
+				json.put("date",text.getText()+"<>"+json.getString("date").toString());
+				json.put("url" , adapter.getUri(viewpager.getCurrentItem()));
+				//if(jsonIsCorrect(json)){
+				Log.d("JSONDate", json.getString("date").toString());
 				jsonArray.put(json);
 				//	json.put("url", maciek);
 				db.addToDataBase(json);
@@ -80,9 +97,10 @@ public class TaskActivity extends Activity {
 				Toast.makeText(TaskActivity.this, jsonArray.toString(),Toast.LENGTH_LONG).show();
 				Intent intent = new Intent(this, MainActivity.class);
 				startActivity(intent);
-				}
+				finish();
+				//}
 	}
-	private boolean jsonIsCorrect(JSONObject json2) throws JSONException {
+	private boolean jsonIsCorrect(JSONObject json2) throws JSONException { // need to correct because adding time
 		if(json2.get("title").toString().equals(""))
 		{
 			Toast("Tytul jest pusty");
@@ -106,7 +124,7 @@ public class TaskActivity extends Activity {
 			    ex.printStackTrace();
 			}
 			if (date == null) {
-				Toast("Nie poprawny format Daty DD-MM-ROK");
+				Toast("Nie poprawny format Daty dd-MM-yyyy");
 			    return false;
 			} else {
 			    return true;
@@ -125,17 +143,10 @@ public class TaskActivity extends Activity {
 
 	public void onStart(){
      	super.onStart();
-     	EditText txtdate;
-     		txtdate=(EditText) findViewById(R.id.Calendary);
-  			   txtdate.setOnFocusChangeListener(new OnFocusChangeListener(){
-  			   public void onFocusChange(View view, boolean hasfocus){
-  				      if(hasfocus){
-  					         DateDialog dialog=new DateDialog(view);
-  					        FragmentTransaction ft =getFragmentManager().beginTransaction();
-  					        dialog.show(ft, "DatePicker");
-  				}
-  			}
-  			
-  		});
-	}
+     	EditText txtDate=(EditText) findViewById(R.id.day);
+     	EditText txtTime = (EditText) findViewById(R.id.time);
+     	DateDialog setDate= new DateDialog (this, txtDate);
+		TimeDialog setTime = new TimeDialog(this, txtTime);	   
+  	}
+
 }
