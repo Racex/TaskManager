@@ -1,45 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal" 
-    android:screenOrientation="portrait">
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+           
+            android:orientation="horizontal"
+            android:screenOrientation="portrait" android:weightSum="1"
+            android:layout_height="10dp">
+
+
+<GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" android:layout_row="13" android:layout_column="11">
 
     <ImageView
         android:id="@+id/picture_from_signal_list_model"
-        android:layout_width="wrap_content"
+        android:layout_width="90sp"
+        android:layout_height="75sp"
+        android:layout_column="0"
+        android:layout_row="0" />
+
+    <GridLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:icon="@android:drawable/ic_menu_save" />
+        android:layout_column="1"
+        android:layout_gravity="top"
+        android:layout_row="0" >
 
-    <TextView
-        android:id="@+id/how_many_days"
-        android:layout_width="114dp"
-        android:layout_height="38dp"
-        android:layout_alignBottom="@+id/picture_from_signal_list_model"
-        android:layout_alignParentRight="true"
-        android:ems="30"
-        android:text="Zostalo Ci"
-        android:textSize="20dp" />
+        <TextView
+            
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Title"
+                android:id="@+id/title" android:layout_row="0" android:layout_column="0"/>
 
-    <TextView
-        android:id="@+id/description"
-        android:layout_width="89dp"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/picture_from_signal_list_model"
-        android:layout_alignLeft="@+id/title"
-        android:ems="10"
-        android:text="description" />
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="107dp"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_gravity="left|top"
+            android:layout_row="2"
+            android:text="Opis"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="64dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="15dp"
-        android:layout_toRightOf="@+id/picture_from_signal_list_model"
-        android:ems="10"
-        android:text="Title" />
-
-</RelativeLayout>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Zostalo Ci"
+                android:id="@+id/how_many_days" android:layout_row="1" android:layout_column="1"/>
+    </GridLayout>
+</GridLayout>
+</GridLayout>

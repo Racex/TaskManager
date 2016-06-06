@@ -60,31 +60,48 @@ public class DataBase extends SQLiteOpenHelper
 		return this.getWritableDatabase();
 	}
 	
-	public JSONArray getJsonArrayDataBase() throws JSONException
+	public JSONArray getJsonArrayDataBase(String sortBy) throws JSONException
 	{
 		JSONArray array = new JSONArray();
-		
-		 	SQLiteDatabase db= getReadableDatabase();
+		SQLiteDatabase db= getReadableDatabase();	
+		if(sortBy.equals("date")){
 		 	try{
-		    Cursor cursor = db.rawQuery("SELECT * FROM " +dataBaseName,null);
-		    
-		    cursor.moveToFirst();
-		    while(!cursor.isAfterLast())
-		    {		JSONObject jsonRead = new JSONObject();
-		            jsonRead.put("title",cursor.getString(cursor.getColumnIndex("TITLE")));
-		            jsonRead.put("description",cursor.getString(cursor.getColumnIndex("DESCRIPTION")));
-		            jsonRead.put("date",cursor.getString(cursor.getColumnIndex("DATE")));
-		            jsonRead.put("url",cursor.getString(cursor.getColumnIndex("URL")));
-		            array.put(jsonRead);
-		            cursor.moveToNext();
-		    }		cursor.close();
-		    db.close();        
-		    return array;
+			    Cursor cursor = db.rawQuery("select *  from "+dataBaseName+" WHERE date != \" \" order  by datetime(date) ASC ;",null);  
+			    takeAllRow(cursor,array);
+			    cursor = db.rawQuery("select *  from "+dataBaseName+" WHERE date = \" \";",null);  
+			    takeAllRow(cursor,array);	 
+			    return array;
 		 	}catch(CursorIndexOutOfBoundsException e)
 		 	{	db.close();
 		 		Log.e("KURSOR", "KURSOR PUSTY");
 		 		return null;
 		 	}
+		}
+		else{
+		 		Cursor cursor = db.rawQuery("select *  from "+dataBaseName+"  order  by title ASC ;",null);
+		 		takeAllRow(cursor,array);	
+		 		return array;
+		 	}
+	}
+
+	private void takeAllRow(Cursor cursor, JSONArray array) throws CursorIndexOutOfBoundsException{
+		cursor.moveToFirst();
+	    while(!cursor.isAfterLast())
+	    {		JSONObject jsonRead = new JSONObject();
+	            try {
+					jsonRead.put("title",cursor.getString(cursor.getColumnIndex("TITLE")));
+				
+	            jsonRead.put("description",cursor.getString(cursor.getColumnIndex("DESCRIPTION")));
+	            jsonRead.put("date",cursor.getString(cursor.getColumnIndex("DATE")));
+	            jsonRead.put("url",cursor.getString(cursor.getColumnIndex("URL")));
+	            array.put(jsonRead);
+	            } catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	            cursor.moveToNext();
+	    }
+		
 	}
 
 	public void remove(JSONObject jsonObject) throws JSONException {

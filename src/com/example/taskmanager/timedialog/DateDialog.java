@@ -2,6 +2,7 @@ package com.example.taskmanager.timedialog;
 import java.util.Calendar;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Dialog;
@@ -13,6 +14,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker; 
@@ -47,8 +49,9 @@ public class DateDialog  implements OnFocusChangeListener, OnDateSetListener {
 
 	@Override
 	public void onDateSet(DatePicker view, int years, int monthOfYear, int dayOfMonth) {
-  			String day=String.valueOf(monthOfYear);
-			String month=String.valueOf(dayOfMonth);
+  			String day=String.valueOf(dayOfMonth);
+			String month=String.valueOf(monthOfYear);
+			
 			if(monthOfYear < 10 )
 			{
 				month="0"+String.valueOf(month);
@@ -57,7 +60,9 @@ public class DateDialog  implements OnFocusChangeListener, OnDateSetListener {
 			{
 				day="0"+String.valueOf(dayOfMonth);
 			}
-        this.editText.setText( day + "-" + month + "-" +years);
+			
+        this.editText.setText(years + "-" + month + "-"+day);
+      
 		
 	}
   	

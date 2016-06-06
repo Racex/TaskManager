@@ -3,9 +3,14 @@
     tools:context="com.example.taskmanager.MainActivity" >
 
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/sort_date"
         android:orderInCategory="100"
         android:showAsAction="never"
-        android:title="@string/action_settings"/>
+        android:title="@string/sort_date"/>
+    <item
+        android:id="@+id/sort_title"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/sort_title"/>
 
 </menu>
