@@ -1,4 +1,4 @@
-package com.example.taskmanager;
+package com.example.taskmanager.data;
 
 
 import org.json.JSONArray;
@@ -28,7 +28,7 @@ public class DataBase extends SQLiteOpenHelper
 	public void onCreate(SQLiteDatabase db) {
 		// TODO Auto-generated method stub
 	//db.execSQL("create table " +data table);	
-		db.execSQL("CREATE TABLE if not exists "+dataBaseName+"( TITLE TEXT , DESCRIPTION TEXT , DATE TEXT , URL, TEXT )");
+		db.execSQL("CREATE TABLE if not exists "+dataBaseName+"(ID INTEGER PRIMARY KEY   AUTOINCREMENT NOT NULL, TITLE TEXT , CREATED TEXT , DESCRIPTION TEXT , TIME_END TEXT , URL, TEXT )");
 		//mydatabase=db;
 	}
 
@@ -42,9 +42,11 @@ public class DataBase extends SQLiteOpenHelper
 		
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues creat = new ContentValues();
+		
 		creat.put("TITLE", json.getString("title"));
+		creat.put("CREATED", json.getString("created"));
 		creat.put("DESCRIPTION", json.getString("description"));
-		creat.put("DATE", json.getString("date"));
+		creat.put("TIME_END", json.getString("time_end"));
 		creat.put("URL", json.getString("url"));
 		if(db.insert(dataBaseName, null, creat) != -1){
 			Log.d("DataBase", "Dodano do bazy" + json.toString());
@@ -55,6 +57,18 @@ public class DataBase extends SQLiteOpenHelper
 		}
 		db.close();
 	}
+	public void updateDataBaseRow(JSONObject json) throws JSONException
+	{
+		SQLiteDatabase db = this.getWritableDatabase();
+		ContentValues creat = new ContentValues();
+		creat.put("TITLE", json.getString("title"));
+		creat.put("CREATED", json.getString("created"));
+		creat.put("DESCRIPTION", json.getString("description"));
+		creat.put("TIME_END", json.getString("time_end"));
+		creat.put("URL", json.getString("url"));
+		db.update(dataBaseName, creat, "id = "+json.getString("id"), null);
+		
+	}
 	public SQLiteDatabase getDataBase()
 	{
 		return this.getWritableDatabase();
@@ -64,11 +78,11 @@ public class DataBase extends SQLiteOpenHelper
 	{
 		JSONArray array = new JSONArray();
 		SQLiteDatabase db= getReadableDatabase();	
-		if(sortBy.equals("date")){
+		if(sortBy.equals("time_end")){
 		 	try{
-			    Cursor cursor = db.rawQuery("select *  from "+dataBaseName+" WHERE date != \" \" order  by datetime(date) ASC ;",null);  
+			    Cursor cursor = db.rawQuery("select *  from "+dataBaseName+" WHERE time_end != \" \" order  by datetime(time_end) ASC ;",null);  
 			    takeAllRow(cursor,array);
-			    cursor = db.rawQuery("select *  from "+dataBaseName+" WHERE date = \" \";",null);  
+			    cursor = db.rawQuery("select *  from "+dataBaseName+" WHERE time_end = \" \"order  by datetime(created) ASC;",null);  
 			    takeAllRow(cursor,array);	 
 			    return array;
 		 	}catch(CursorIndexOutOfBoundsException e)
@@ -89,10 +103,11 @@ public class DataBase extends SQLiteOpenHelper
 	    while(!cursor.isAfterLast())
 	    {		JSONObject jsonRead = new JSONObject();
 	            try {
+	            	jsonRead.put("id" , cursor.getString(cursor.getColumnIndex("ID")));
 					jsonRead.put("title",cursor.getString(cursor.getColumnIndex("TITLE")));
-				
+				jsonRead.put("created", cursor.getString(cursor.getColumnIndex("CREATED")));
 	            jsonRead.put("description",cursor.getString(cursor.getColumnIndex("DESCRIPTION")));
-	            jsonRead.put("date",cursor.getString(cursor.getColumnIndex("DATE")));
+	            jsonRead.put("time_end",cursor.getString(cursor.getColumnIndex("TIME_END")));
 	            jsonRead.put("url",cursor.getString(cursor.getColumnIndex("URL")));
 	            array.put(jsonRead);
 	            } catch (JSONException e) {
@@ -106,11 +121,17 @@ public class DataBase extends SQLiteOpenHelper
 
 	public void remove(JSONObject jsonObject) throws JSONException {
 		SQLiteDatabase db= getReadableDatabase();
-	    if(db.delete(dataBaseName, "TITLE" + "="+ "'"+jsonObject.getString("title")+"'",null) > 0);
+	    if(db.delete(dataBaseName, "ID" + "="+ "'"+jsonObject.getString("id")+"'",null) > 0)
 	    db.close();
 	    Log.d("USUNIETE", jsonObject.toString());
-	    
 	    //  return array;
 	}
+	public boolean isIdInDatabase(int id)
+	{
+		if(getReadableDatabase().rawQuery("Select * from "+dataBaseName+" where id = "+id+" ",null).getCount() > 0)
+		return true;
+		return false;
+	}
+	
    
 }

@@ -5,27 +5,22 @@ import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.example.taskmanager.adapter.ListAdapter;
-import com.example.taskmanager.adapter.ListAdapter.ViewHolder;
 import com.example.taskmanager.adapter.TimeToEnd;
+import com.example.taskmanager.data.DataBase;
+import com.example.taskmanager.data.JsonExportImport;
 
 import android.annotation.SuppressLint;
 import android.app.ListActivity;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 @SuppressLint("NewApi")
 public class MainActivity extends ListActivity {
@@ -34,7 +29,7 @@ public class MainActivity extends ListActivity {
 	private volatile JSONArray array;
 	private ListAdapter listAdapter;
 	private static Thread threadTime = null;
-	private String sortBy ="date";
+	private String sortBy ="time_end";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -72,6 +67,7 @@ public class MainActivity extends ListActivity {
 		try {
 			db.remove(array.getJSONObject(position));
 			array.remove(position);
+			ListAdapter.holder.remove(position);
 			updateList();
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -88,8 +84,9 @@ public class MainActivity extends ListActivity {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
+		JsonExportImport file = new JsonExportImport(this);
 		if (id == R.id.sort_date) {
-			sortBy="date";
+			sortBy="time_end";
 			try {
 				updateList();
 			} catch (JSONException e) {
@@ -100,6 +97,29 @@ public class MainActivity extends ListActivity {
 		}else if (id == R.id.sort_title) {
 			sortBy="title";
 			try {
+				updateList();
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return true;
+		}
+		else if (id == R.id.import_to) {
+			try {
+				updateList();
+				
+				file.createAndSaveFile("JsonFile", array.toString());
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			//import to json file
+			return true;
+		}
+		else if (id == R.id.export) {
+			//export from json file
+			try {
+				file.readJsonData("JsonFile");
 				updateList();
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
@@ -151,13 +171,13 @@ public class MainActivity extends ListActivity {
 			public void run() {
 				// TODO Auto-generated method stub
 				
-		
+		int time=10000;
 		
 				Log.d("THREAD", "Uruchamiam watel");
 				while(true){
 				// TODO Auto-generated method stub
 				try {
-					Thread.sleep(70000);
+					Thread.sleep(time);
 				} catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -169,11 +189,12 @@ public class MainActivity extends ListActivity {
 		            	TimeToEnd timend=new TimeToEnd();
 		            	try {
 							array=db.getJsonArrayDataBase(sortBy);
-						
+							Log.d("THREAD", "AR:"+String.valueOf(ListAdapter.holder.size()) + "JS:"+array.length());
 		            	for(int i=0; i <ListAdapter.holder.size() ; i++){
 		            	if(array !=null){
-		            		Log.d("THREAD", timend.getTimeToEnd(array.getJSONObject(i).getString("date")));
-							ListAdapter.holder.get(i).setText(timend.getTimeToEnd(array.getJSONObject(i).getString("date")));}
+		            		
+		            		Log.d("THREAD", timend.getTimeToEnd(array.getJSONObject(i).getString("time_end")));
+							ListAdapter.holder.get(i).setText(timend.getTimeToEnd(array.getJSONObject(i).getString("time_end")));}
 		            	}
 		            	}catch (ParseException e){
 							// TODO Auto-generated catch block

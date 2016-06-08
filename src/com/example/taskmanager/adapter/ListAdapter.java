@@ -19,10 +19,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ListAdapter extends ArrayAdapter<String>{
-	LayoutInflater inflater;
-	Context context;
-	JSONArray array;
-	TimeToEnd timend;
+	private LayoutInflater inflater;
+	private Context context;
+	private JSONArray array;
+	private TimeToEnd timend;
 	
 	public volatile static ArrayList<TextView> holder;
 	public ListAdapter(Context context, JSONArray array) {
@@ -54,13 +54,13 @@ public class ListAdapter extends ArrayAdapter<String>{
 		holder.title=(TextView) convertView.findViewById(R.id.title);
 		holder.description=(TextView) convertView.findViewById(R.id.description);
 		holder.days=(TextView) convertView.findViewById(R.id.how_many_days);
-		this.holder.add(holder.days);
+		shouldAddtoArrayList(holder.days);
 		holder.image=(ImageView) convertView.findViewById(R.id.picture_from_signal_list_model);
 		try {
 			
 			holder.title.setText(array.getJSONObject(position).getString("title"));
 			holder.description.setText(array.getJSONObject(position).getString("description"));
-			holder.days.setText(timend.getTimeToEnd(array.getJSONObject(position).getString("date")));
+			holder.days.setText(timend.getTimeToEnd(array.getJSONObject(position).getString("time_end")));
 			try{
 				
 			Picasso.with(context).load(array.getJSONObject(position).getString("url")).into(holder.image);
@@ -77,6 +77,14 @@ public class ListAdapter extends ArrayAdapter<String>{
 			e1.printStackTrace();
 		}
 		return convertView;
+	}
+
+	private void shouldAddtoArrayList(TextView days) {
+		if(this.holder.size() <= array.length())
+			this.holder.add(days);
+			//else
+			//	this.holder.removeAll(getHolder());
+		
 	}
 
 	public  ArrayList<TextView> getHolder()

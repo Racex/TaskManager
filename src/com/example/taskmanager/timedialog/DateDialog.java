@@ -2,22 +2,13 @@ package com.example.taskmanager.timedialog;
 import java.util.Calendar;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.TimePickerDialog;
-import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Context;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.TimePicker; 
+import android.widget.EditText; 
 
 @SuppressLint("ValidFragment") 
 public class DateDialog  implements OnFocusChangeListener, OnDateSetListener {

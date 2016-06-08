@@ -8,6 +8,8 @@
     <string name="sort_date">Sortuj data</string>
     <string name="sort_title">Sortuj tytułami</string>
     
+    <string name="export">Exportuj</string>
+    <string name="import_to">Importuj</string>
 
 
 </resources>
