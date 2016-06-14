@@ -3,79 +3,94 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:screenOrientation="portrait">
-
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="69dp"
-        android:text="Dodaj Zadanie" 
-        android:onClick="addTask"/>
-
+    android:screenOrientation="portrait" 
+    android:background="@color/yellow_layout_main">
+	
     <EditText
         android:id="@+id/tittle"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="67dp"
-        android:ems="10" 
-        android:singleLine="true"
-        android:hint="Podaj tytuł"/>
+      	android:background="@drawable/shape_to_signal_row"
+        android:ems="10"
+        android:hint="@string/title"
+        android:singleLine="true" 
+	  />
+    <android.support.v4.view.ViewPager
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/menu_pager"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/day"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/add_task"
+        android:layout_toEndOf="@+id/button1" 
+        android:background="@color/yellow_layout_main"
+       >
+
+    </android.support.v4.view.ViewPager>
 
     <EditText
         android:id="@+id/description"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tittle"
-        android:layout_below="@+id/tittle"
-        android:layout_marginTop="49dp"
+        android:layout_height="170dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/time"
+        android:background="@color/yellow_layout_main"
+        android:divider="@android:color/transparent"
         android:ems="10"
-        android:singleLine="true" 
-        android:hint="Podaj opis"
+        android:hint="@string/description"
+        android:inputType="textMultiLine" />
 
-       />
+    <Button
+        android:id="@+id/add_task"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/time"
+        android:layout_marginBottom="27dp"
+        android:onClick="addTask"
+        android:background="@drawable/button"
+        android:text="@string/add_task" />
 
-   <android.support.v4.view.ViewPager
-       xmlns:android="http://schemas.android.com/apk/res/android"
-       android:id="@+id/menu_pager"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_above="@+id/button1"
-       android:layout_alignLeft="@+id/button1"
-       android:layout_alignRight="@+id/button1"
-       android:layout_below="@+id/description" >
+    <EditText
+        android:id="@+id/day"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_alignTop="@+id/time"
+        android:layout_toEndOf="@+id/time"
+        android:layout_toRightOf="@+id/time"
+        android:background="@color/yellow_layout_main"
+        android:ems="10"
+        android:hint="@string/day"
+        android:singleLine="true"  />
 
-   </android.support.v4.view.ViewPager>
+    <EditText
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tittle"
+        android:background="@color/yellow_layout_main"
+        android:ems="10"
+        android:hint="@string/time"
+        android:singleLine="true" />
 
-   <EditText
-       android:id="@+id/time"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_alignBottom="@+id/menu_pager"
-       android:layout_marginBottom="49dp"
-       android:layout_toLeftOf="@+id/menu_pager"
-       android:ems="10"
-       android:hint="Godzina"
-       android:singleLine="true" 
-      />
-
-      
-  
-
-   <EditText
-       android:id="@+id/day"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_alignBaseline="@+id/time"
-       android:layout_alignBottom="@+id/time"
-       android:layout_alignParentRight="true"
-       android:layout_toRightOf="@+id/menu_pager"
-       android:ems="10"
-       android:hint="Dzień"
-       android:singleLine="true" />
+    <Button
+        android:id="@+id/remove_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/add_task"
+        android:layout_alignBottom="@+id/add_task"
+        android:layout_alignParentLeft="true"
+        android:onClick="removeTask"
+        android:text="@string/remove" 
+        android:background="@drawable/button"
+        android:visibility="gone"
+    	/>
 
 </RelativeLayout>

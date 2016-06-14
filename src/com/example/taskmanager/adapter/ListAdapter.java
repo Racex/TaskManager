@@ -1,12 +1,13 @@
 package com.example.taskmanager.adapter;
 
-import java.text.ParseException;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.example.taskmanager.R;
+import com.example.taskmanager.data.TimeToEnd;
+import com.example.taskmanager.view.SetView;
 import com.squareup.picasso.Picasso;
 
 import android.content.Context;
@@ -14,30 +15,35 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 
 public class ListAdapter extends ArrayAdapter<String>{
 	private LayoutInflater inflater;
 	private Context context;
 	private JSONArray array;
 	private TimeToEnd timend;
+	private SetView editView;
+	public final static HashMap<String , TextView> holder=new HashMap<String ,TextView>();
 	
-	public volatile static ArrayList<TextView> holder;
 	public ListAdapter(Context context, JSONArray array) {
 		super(context, R.layout.single_list_model,new String[array.length()]);
 		this.context=context;
 		this.array=array;
-		this.timend = new TimeToEnd();
+		editView=new SetView(context);
+		//this.holder=new HashMap<String ,TextView>();
+		this.timend = new TimeToEnd(context);
 		// TODO Auto-generated constructor stub
 	}
 	public class ViewHolder
-	{
-		TextView title;
-		TextView description;
+	{	public String id;
+		public TextView title;
+		public TextView description;
 		public TextView days;
-		ImageView image;
+		public ImageView image;
 		//need to add description image from url;
 	}
 	@Override
@@ -49,47 +55,69 @@ public class ListAdapter extends ArrayAdapter<String>{
 		}
 		
 		ViewHolder holder= new ViewHolder();
-		
-		//LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(1000, 1000);
 		holder.title=(TextView) convertView.findViewById(R.id.title);
+		
 		holder.description=(TextView) convertView.findViewById(R.id.description);
 		holder.days=(TextView) convertView.findViewById(R.id.how_many_days);
-		shouldAddtoArrayList(holder.days);
 		holder.image=(ImageView) convertView.findViewById(R.id.picture_from_signal_list_model);
 		try {
-			
+			shouldAddtoHashMap(holder.days , array.getJSONObject(position).getString("id").toString());
+		} catch (JSONException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		try {
+			String jSONtime=array.getJSONObject(position).getString("time_end");
+			editView.setBackground(holder.title , timend.getColorToEnd(jSONtime));
+			holder.days.setText(timend.getTimeToEnd(jSONtime));
+			holder.id=array.getJSONObject(position).getString("id").toString();	
 			holder.title.setText(array.getJSONObject(position).getString("title"));
 			holder.description.setText(array.getJSONObject(position).getString("description"));
-			holder.days.setText(timend.getTimeToEnd(array.getJSONObject(position).getString("time_end")));
-			try{
-				
-			Picasso.with(context).load(array.getJSONObject(position).getString("url")).into(holder.image);
+			
+			
+			if(!array.getJSONObject(position).getString("url").toString().equals(""))
+				Picasso.with(context).load(array.getJSONObject(position).getString("url").toString()).into(holder.image);	
+			else{
+				holder.image.setVisibility(android.view.View.INVISIBLE);
+				//holder.title.setText(array.getJSONObject(position).getString("id")+":"+array.getJSONObject(position).getString("url")+"<--");
+				}
 			}catch(Exception e)
 			{
 				Log.d("wysypal sie ", "nie ma zdjiecia");
+				e.printStackTrace();
 			}
-			
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParseException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 		return convertView;
-	}
-
-	private void shouldAddtoArrayList(TextView days) {
-		if(this.holder.size() <= array.length())
-			this.holder.add(days);
-			//else
-			//	this.holder.removeAll(getHolder());
+		}
+	
+	private boolean shouldAddtoHashMap(TextView days , String key) {
+		if(holder.containsKey(key))
+		{	
+			holder.remove(key);
+			return false;
+		}
 		
+		holder.put(key, days);
+		return true;
 	}
+	
 
-	public  ArrayList<TextView> getHolder()
+	public  HashMap  <String, TextView> getHolder()
 	{
 		return holder;
 	}
+
+	@Override
+	public int getViewTypeCount() {
+		if(getCount() !=0)
+			return getCount();
+		return 1;
+	}
+	
+	@Override
+	public int getItemViewType(int position) {
+	    return Adapter.IGNORE_ITEM_VIEW_TYPE;
+	}
+
+	
 
 }

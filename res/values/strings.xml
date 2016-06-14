@@ -7,9 +7,13 @@
     <string name="title_activity_task">TaskAdd/Edit</string>
     <string name="sort_date">Sortuj data</string>
     <string name="sort_title">Sortuj tytułami</string>
-    
+    <string name="description">Podaj opis</string>
+    <string name="title">Podaj tytuł</string>
+    <string name="day">Dzień</string>
+    <string name="add_task">Dodaj Zadanie</string>
+    <string name="time">Godzina</string>
     <string name="export">Exportuj</string>
     <string name="import_to">Importuj</string>
-
+    <string name="remove">Usuń</string>
 
 </resources>

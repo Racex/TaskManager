@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+        <color name="color_for_hours" >#F7E75B</color>
+        <color name="color_for_minutes" type="color">#F7BD4A</color>
+        <color name="color_for_over_time" type="color">#D6653C</color>
+        <color name="white" type="color">#FFFFFF</color>
+        <color name="standard_yellow">#F7F25C</color>
+   		<color name="yellow_layout_main">#F0EEB9</color>
+</resources>
