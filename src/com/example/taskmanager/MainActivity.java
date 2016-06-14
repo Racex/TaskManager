@@ -1,13 +1,12 @@
 package com.example.taskmanager;
 
-import java.text.ParseException;
-
 import org.json.JSONArray;
 import org.json.JSONException;
+
 import com.example.taskmanager.adapter.ListAdapter;
 import com.example.taskmanager.data.DataBase;
+import com.example.taskmanager.data.UserPreferences;
 import com.example.taskmanager.data.JsonExportImport;
-import com.example.taskmanager.data.TimeToEnd;
 
 import android.app.ListActivity;
 import android.content.Intent;
@@ -19,7 +18,7 @@ import android.view.View;
 import android.widget.ListView;
 
 public class MainActivity extends ListActivity {
-
+	private UserPreferences settings;
 	private DataBase db;
 	private volatile JSONArray array;
 	private ListAdapter listAdapter;
@@ -31,7 +30,8 @@ public class MainActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		db = new DataBase(this);
-
+		settings= new UserPreferences(this);
+		sortBy=settings.getSettings();
 		try {
 			array = db.getJsonArrayDataBase(sortBy);
 		} catch (JSONException e) {
@@ -88,6 +88,7 @@ public class MainActivity extends ListActivity {
 		JsonExportImport file = new JsonExportImport(this);
 		if (id == R.id.sort_date) {
 			sortBy = "time_end";
+			settings.save("time_end");
 			try {
 				updateList();
 			} catch (JSONException e) {
@@ -97,6 +98,7 @@ public class MainActivity extends ListActivity {
 			return true;
 		} else if (id == R.id.sort_title) {
 			sortBy = "title";
+			settings.save("title");
 			try {
 				updateList();
 			} catch (JSONException e) {
@@ -136,7 +138,6 @@ public class MainActivity extends ListActivity {
 
 		startActivity(intent);
 		finish();
-		// putextra db and array ?
 	}
 
 	private void updateList() throws JSONException {
@@ -152,7 +153,6 @@ public class MainActivity extends ListActivity {
 
 	@Override
 	protected void onPause() {
-		//overridePendingTransition(R.animator.animation_beetwen_activity, R.animator.animation_beetwen_activity_end);
 		super.onPause();
 	}
 
