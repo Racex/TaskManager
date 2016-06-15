@@ -52,7 +52,7 @@ public class JsonExportImport {
 				if (db.isIdInDatabase(Integer.valueOf(arrayFromExport.getJSONObject(i).getString("id").toString())))
 					showMessage(arrayFromExport.getJSONObject(i));
 				else {
-					db.addToDataBase(arrayFromExport.getJSONObject(i));
+					db.addToDataBaseWithId(arrayFromExport.getJSONObject(i));
 				}
 			}
 

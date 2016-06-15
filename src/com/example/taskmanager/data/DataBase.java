@@ -25,7 +25,7 @@ public class DataBase extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL("CREATE TABLE if not exists " + dataBaseName
-				+ "(ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, TITLE TEXT, CREATED TEXT, DESCRIPTION TEXT, TIME_END TEXT, URL TEXT )");
+				+ "(ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, TITLE TEXT NOT NULL , CREATED TEXT NULL, DESCRIPTION TEXT NULL, TIME_END TEXT NULL, URL TEXT NULL)");
 	}
 
 	@Override
@@ -33,21 +33,43 @@ public class DataBase extends SQLiteOpenHelper {
 		// TODO Auto-generated method stub
 	}
 
-	public void addToDataBase(JSONObject json) throws JSONException {
+	public void addToDataBaseWithoutId(JSONObject json) throws JSONException {
 
+		addToDataBase(json, null, "Autoincrement");
+	}
+
+	public void addToDataBase(JSONObject json, ContentValues creat, String addIdorAutoIncrement) {
 		SQLiteDatabase db = this.getWritableDatabase();
-		ContentValues creat = new ContentValues();
-		creat.put("TITLE", json.getString("title"));
-		creat.put("CREATED", json.getString("created"));
-		creat.put("DESCRIPTION", json.getString("description"));
-		creat.put("TIME_END", json.getString("time_end"));
-		creat.put("URL", json.getString("url"));
-		if (db.insert(dataBaseName, null, creat) != -1) {
-			Log.d("DataBase", "Dodano do bazy" + json.toString());
-		} else {
-			Log.d("DataBase", "nie dodano do bazy" + json.toString());
+		if (creat == null)
+			creat = new ContentValues();
+		try {
+			if (addIdorAutoIncrement.equals("addId"))// else creat with
+														// autoincrement ID
+			creat.put("ID", json.getString("id").toString());
+			creat.put("TITLE", json.getString("title"));
+			creat.put("CREATED", json.getString("created"));
+			creat.put("DESCRIPTION", json.getString("description"));
+			creat.put("TIME_END", json.getString("time_end"));
+			creat.put("URL", json.getString("url"));
+			if (db.insert(dataBaseName, null, creat) != -1) {
+				Log.d("DataBase", "Dodano do bazy" + json.toString());
+			} else {
+				Log.d("DataBase", "nie dodano do bazy" + json.toString());
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			db.close();
 		}
-		db.close();
+
+	}
+
+	public void addToDataBaseWithId(JSONObject json) throws JSONException {
+
+		ContentValues creat = new ContentValues();
+		creat.put("ID", json.getString("id").toString());
+		addToDataBase(json, creat, "addId");
 	}
 
 	public void updateDataBaseRow(JSONObject json) throws JSONException {
@@ -59,6 +81,7 @@ public class DataBase extends SQLiteOpenHelper {
 		creat.put("TIME_END", json.getString("time_end"));
 		creat.put("URL", json.getString("url"));
 		db.update(dataBaseName, creat, "id = " + json.getString("id"), null);
+		db.close();
 
 	}
 
@@ -83,7 +106,7 @@ public class DataBase extends SQLiteOpenHelper {
 				for (int i = 0; i < array2.length(); i++) {
 					array.put(array2.getJSONObject(i));
 				}
-
+				db.close();
 				return array;
 			} catch (CursorIndexOutOfBoundsException e) {
 				db.close();
@@ -93,6 +116,7 @@ public class DataBase extends SQLiteOpenHelper {
 		} else {
 			Cursor cursor = db.rawQuery("select *  from " + dataBaseName + "  order  by title ASC ;", null);
 			array = takeAllRow(cursor);
+			db.close();
 			return array;
 		}
 	}
@@ -123,9 +147,8 @@ public class DataBase extends SQLiteOpenHelper {
 	public void remove(JSONObject jsonObject) throws JSONException {
 		SQLiteDatabase db = getReadableDatabase();
 		if (db.delete(dataBaseName, "ID" + "=" + "'" + jsonObject.getString("id") + "'", null) > 0)
+		{}
 			db.close();
-		Log.d("USUNIETE", jsonObject.toString());
-		// return array;
 	}
 
 	public boolean isIdInDatabase(int id) {
@@ -143,9 +166,10 @@ public class DataBase extends SQLiteOpenHelper {
 			return takeAllRow(cursor).getJSONObject(0);
 		} catch (CursorIndexOutOfBoundsException | JSONException e) {
 			e.printStackTrace();
+		}finally {
+			db.close();
 		}
 		return null;
-
 	}
 
 }

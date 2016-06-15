@@ -60,7 +60,7 @@ public class TaskActivity extends Activity {
 				db.updateDataBaseRow(json);
 				onBackPressed();
 			} else {
-				db.addToDataBase(json);
+				db.addToDataBaseWithoutId(json);
 				Log.d("json", json.toString());
 				Intent intent = new Intent(this, MainActivity.class);
 				startActivity(intent);
@@ -70,17 +70,12 @@ public class TaskActivity extends Activity {
 
 	}
 
-	private boolean jsonIsCorrect(JSONObject json2) throws JSONException { // need
-																			// to
-																			// correct
-																			// because
-																			// adding
-																			// time
+	private boolean jsonIsCorrect(JSONObject json2) throws JSONException { 
 		if (json2.get("title").toString().equals("")) {
 			Toast("Tytul jest pusty");
 			return false;
 		}
-		if (!json2.get("time_end").toString().equals("")) {
+		if (!json2.get("time_end").toString().equals(" ")) {
 			Date date = null;
 			try {
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
